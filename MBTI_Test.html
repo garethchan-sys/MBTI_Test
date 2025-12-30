@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安老院MBTI性格測試 - 互動版</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #4a90e2;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        .section:hover {
+            transform: translateY(-5px);
+        }
+        .question {
+            margin-bottom: 20px;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .question.active {
+            display: block;
+            opacity: 1;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+        label:hover {
+            background-color: #e6f7ff;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+            accent-color: #4a90e2;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #357bd8;
+        }
+        #nextBtn {
+            margin-top: 20px;
+        }
+        #submitBtn {
+            display: none;
+        }
+        #progress {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            height: 8px;
+        }
+        #progressBar {
+            width: 0%;
+            height: 8px;
+            background-color: #4a90e2;
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+        #result {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+        }
+        #result h2 {
+            color: #27ae60;
+        }
+        #result p {
+            font-size: 16px;
+        }
+        #resultIcon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>安老院MBTI性格測試 - 互動版</h1>
+    <div class="section">
+        <h2>測試說明</h2>
+        <p>這個互動測試基於樂活易的安老院分類指標，幫助您為長者找到最適合的安老院類型。問題將逐步顯示，請根據長者的需求誠實回答。測試結束後，將顯示您的安老院「人格類型」及解釋。</p>
+        <p>維度：</p>
+        <ul>
+            <li>護理人手：B (基本) vs V (增值)</li>
+            <li>環境設施：P (樸實) vs L (華麗)</li>
+            <li>行政管理：H (人性化) vs S (系統化)</li>
+            <li>平均收費：E (低收費) vs M (高收費)</li>
+        </ul>
+        <button onclick="startQuiz()">開始測試</button>
+    </div>
+
+    <form id="quizForm" class="section" style="display: none;">
+        <h2>問卷問題</h2>
+        <div id="progress">
+            <div id="progressBar"></div>
+        </div>
+
+        <!-- 維度1: 護理人手 -->
+        <div class="question" id="q1">
+            <p>1. 長者需要什麼樣的護理？</p>
+            <label><input type="radio" name="q1" value="B"> A：只需基本日常照顧，如餵食和換藥，足夠就好。</label>
+            <label><input type="radio" name="q1" value="V"> B：希望有額外專業支持，如物理治療或營養師。</label>
+        </div>
+        <div class="question" id="q2">
+            <p>2. 如果長者偶爾不適，你期望院舍如何應對？</p>
+            <label><input type="radio" name="q2" value="B"> A：有基本醫療設備和護士即可，簡單處理。</label>
+            <label><input type="radio" name="q2" value="V"> B：有24小時醫療團隊和客製化計劃。</label>
+        </div>
+        <div class="question" id="q3">
+            <p>3. 護理團隊規模對你來說？</p>
+            <label><input type="radio" name="q3" value="B"> A：符合標準就好，不需太多人。</label>
+            <label><input type="radio" name="q3" value="V"> B：越多專業人員越好，提供全面關懷。</label>
+        </div>
+
+        <!-- 維度2: 環境設施 -->
+        <div class="question" id="q4">
+            <p>4. 安老院的環境風格，你偏好？</p>
+            <label><input type="radio" name="q4" value="P"> A：乾淨簡單，有基本休閒區如花園或圖書室。</label>
+            <label><input type="radio" name="q4" value="L"> B：豪華舒適，有泳池、SPA或藝術裝潢。</label>
+        </div>
+        <div class="question" id="q5">
+            <p>5. 長者房間設計？</p>
+            <label><input type="radio" name="q5" value="P"> A：實用舒適，基本傢俱即可。</label>
+            <label><input type="radio" name="q5" value="L"> B：寬敞精緻，像酒店套房。</label>
+        </div>
+        <div class="question" id="q6">
+            <p>6. 院內設施的重要性？</p>
+            <label><input type="radio" name="q6" value="P"> A：重點在實用，不需花俏。</label>
+            <label><input type="radio" name="q6" value="L"> B：越多高端設施越好，提升生活品質。</label>
+        </div>
+
+        <!-- 維度3: 行政管理 -->
+        <div class="question" id="q7">
+            <p>7. 院舍的管理方式？</p>
+            <label><input type="radio" name="q7" value="H"> A：彈性人性化，允許長者自訂作息和家庭活動。</label>
+            <label><input type="radio" name="q7" value="S"> B：系統化高效，用APP或科技追蹤一切。</label>
+        </div>
+        <div class="question" id="q8">
+            <p>8. 處理長者意見時？</p>
+            <label><input type="radio" name="q8" value="H"> A：重視情感溝通，像大家庭討論。</label>
+            <label><input type="radio" name="q8" value="S"> B：有標準程序和數據分析，確保公平。</label>
+        </div>
+        <div class="question" id="q9">
+            <p>9. 日常運作風格？</p>
+            <label><input type="radio" name="q9" value="H"> A：溫暖隨和，規則不嚴格。</label>
+            <label><input type="radio" name="q9" value="S"> B：結構清晰，時間表精準。</label>
+        </div>
+
+        <!-- 維度4: 平均收費 -->
+        <div class="question" id="q10">
+            <p>10. 預算考量？</p>
+            <label><input type="radio" name="q10" value="E"> A：希望費用親民，能負擔長期。</label>
+            <label><input type="radio" name="q10" value="M"> B：願意付較高費用，換取更好服務。</label>
+        </div>
+        <div class="question" id="q11">
+            <p>11. 收費與價值？</p>
+            <label><input type="radio" name="q11" value="E"> A：低收費優先，服務實在就好。</label>
+            <label><input type="radio" name="q11" value="M"> B：高收費沒問題，如果有獨特價值如私人空間。</label>
+        </div>
+        <div class="question" id="q12">
+            <p>12. 如果有政府津貼？</p>
+            <label><input type="radio" name="q12" value="E"> A：優先選擇能申請津貼的低收費院舍。</label>
+            <label><input type="radio" name="q12" value="M"> B：即使高收費，也選提供高端體驗的。</label>
+        </div>
+
+        <button type="button" id="nextBtn" onclick="nextQuestion()">下一題</button>
+        <button type="button" id="submitBtn" onclick="calculateResult()">提交測試</button>
+    </form>
+
+    <div id="result" class="section">
+        <div id="resultIcon">🏡</div>
+        <h2>您的安老院人格類型</h2>
+        <p id="type"></p>
+        <p id="description"></p>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        const totalQuestions = 12;
+        const questions = document.querySelectorAll('.question');
+
+        function startQuiz() {
+            document.querySelector('.section').style.display = 'none';
+            document.getElementById('quizForm').style.display = 'block';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (currentQuestion < totalQuestions) {
+                questions[currentQuestion].classList.add('active');
+                updateProgress();
+                if (currentQuestion === totalQuestions - 1) {
+                    document.getElementById('nextBtn').style.display = 'none';
+                    document.getElementById('submitBtn').style.display = 'block';
+                }
+            }
+        }
+
+        function nextQuestion() {
+            const currentQ = questions[currentQuestion].querySelector('input[type="radio"]:checked');
+            if (!currentQ) {
+                alert('請選擇一個答案！');
+                return;
+            }
+            currentQuestion++;
+            showQuestion();
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function calculateResult() {
+            const form = document.getElementById('quizForm');
+            const checked = form.querySelectorAll('input[type="radio"]:checked');
+            if (checked.length < totalQuestions) {
+                alert('請回答所有問題！');
+                return;
+            }
+
+            let dim1 = { B: 0, V: 0 };
+            let dim2 = { P: 0, L: 0 };
+            let dim3 = { H: 0, S: 0 };
+            let dim4 = { E: 0, M: 0 };
+
+            checked.forEach((input, index) => {
+                const val = input.value;
+                if (index < 3) dim1[val]++;
+                else if (index < 6) dim2[val]++;
+                else if (index < 9) dim3[val]++;
+                else dim4[val]++;
+            });
+
+            const type1 = dim1.B > dim1.V ? 'B' : 'V';
+            const type2 = dim2.P > dim2.L ? 'P' : 'L';
+            const type3 = dim3.H > dim3.S ? 'H' : 'S';
+            const type4 = dim4.E > dim4.M ? 'E' : 'M';
+
+            const fullType = type1 + type2 + type3 + type4;
+
+            const types = {
+                'BPHE': '溫暖社區型，像ISFJ（守護者）。適合自理長者，追求簡單家庭氛圍。示例：郊區小型院舍，月費$5,000起。',
+                'BPHM': '親切高端型，像ESFJ（執政官）。低調但有品質保證。適合中產家庭。',
+                'BPSE': '效率實用型，像ISTJ（物流師）。規則清楚，適合愛規律的長者。',
+                'BPSM': '專業基礎型，像ESTJ（行政官）。科技管理但不奢華。',
+                'BLHE': '藝術溫馨型，像INFP（調停者）。美麗環境但親民。適合浪漫長者。',
+                'BLHM': '豪華家庭型，像ENFP（競選者）。活力十足的華麗社區。',
+                'BLSE': '現代實惠型，像INTJ（建築師）。高效華麗但經濟。',
+                'BLSM': '精英基礎型，像ENTJ（指揮官）。高端但聚焦基本護理。',
+                'VPHE': '關懷社區型，像ISFP（探險家）。專業護理在溫暖環境。',
+                'VPHM': '深度照護型，像ESFP（表演者）。增值服務但人性化。',
+                'VPSE': '科學實用型，像ISTP（藝術家）。科技護理，經濟高效。',
+                'VPSM': '專業系統型，像ESTP（企業家）。全面但不華麗。',
+                'VLHE': '夢幻關懷型，像INFJ（提倡者）。華麗環境加增值護理，親民價。',
+                'VLHM': '度假天堂型，像ENFJ（主人公）。高端全方位，像五星養老村。',
+                'VLSE': '未來科技型，像INTP（邏輯學家）。華麗系統，經濟選擇。',
+                'VLSM': '終極奢華型，像ENTP（辯論家）。頂級一切，適合享受型長者。'
+            };
+
+            document.getElementById('type').textContent = '您的類型：' + fullType;
+            document.getElementById('description').textContent = types[fullType] || '未知類型，請重試。';
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('quizForm').style.display = 'none';
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+    </script>
+</body>
+</html>
